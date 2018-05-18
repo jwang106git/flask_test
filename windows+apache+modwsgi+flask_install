@@ -1,0 +1,56 @@
+环境
+64位windows
+64位python 3.6
+
+apache
+1.
+进入Apache官网下载页面
+2.
+点击Files for Microsoft Windows进入windows版下载页面
+3.
+点击Apache Haus，进入版本选择页面
+4.
+下载最新版本的64位Apache
+5. cd Apache24/bin
+   httpd -k install(以管理员身份打开cmd）
+
+modwsgi
+1.
+打开http://www.lfd.uci.edu/~gohlke/pythonlibs/#pil
+2.
+找到Mod_wsgi，下载对应位数和python的版本，本人是python3.6，64位windows
+所以选择了mod_wsgi-4.5.24+ap24vc14-cp36-cp36m-win_amd64.whl
+3.
+pip install mod_wsgi-4.5.24+ap24vc14-cp36-cp36m-win_amd64.whl
+4.
+在安装成功后在python的安装目录的\scripts文件夹下运行
+mod_wsgi-express module-config  
+输出如下三行结果
+
+LoadFile "c:/users/admin/appdata/local/programs/python/python36/python36.dll"
+LoadModule wsgi_module "c:/users/admin/appdata/local/programs/python/python36/lib/site-packages/mod_wsgi/server/mod_wsgi.cp36-win_amd64.pyd"
+WSGIPythonHome "c:/users/admin/appdata/local/programs/python/python36"
+
+把这三行内容复制到http.cnf文件下进行配置
+取代其他教程中的
+LoadModule wsgi_module modules/mod_wsgi.so 
+5.
+配置http.conf
+1)
+Define SRVROOT "F:/flask_server/apache/httpd-2.4.33-o102o-x64-vc14-r2/Apache24"
+ServerRoot "${SRVROOT}"
+2)
+Listen 8080
+<VirtualHost *:8080 >  
+WSGIScriptAlias / F:\flask_server\apache\httpd-2.4.33-o102o-x64-vc14-r2\Apache24\test\wsgi.py
+<Directory 'F:\flask_server\apache\httpd-2.4.33-o102o-x64-vc14-r2\Apache24\test'>
+Require all granted
+Require host ip
+RewriteEngine on
+</Directory>  
+</VirtualHost> 
+3)
+LoadModule vhost_alias_module modules/mod_vhost_alias.so
+LoadModule rewrite_module modules/mod_rewrite.so
+4)
+ServerName localhost:8080
