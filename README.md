@@ -7,3 +7,11 @@ learn note:
 {#...#}     #注释
 
 2)
+
+
+html learn
+1)
+https://blog.csdn.net/mr_fzz/article/details/53147466
+2)
+window.onload=function(){f();}
+function f(){}
